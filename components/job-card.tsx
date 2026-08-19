@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Bookmark, Clock, Flag, MapPin, Navigation, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { reportJob } from '@/lib/api'
@@ -55,7 +55,7 @@ export function JobCard({
         </div>
 
         <div className="min-w-0 flex-1 pr-14">
-          <h3 className="truncate font-display text-base font-bold leading-tight">{job.title}</h3>
+          <h3 className="font-display text-base font-bold leading-snug text-balance">{job.title}</h3>
           <p className="truncate text-sm text-muted-foreground">{job.company}</p>
           {job.publisherName ? (
             <p className="truncate text-xs text-muted-foreground/80">
@@ -90,6 +90,8 @@ export function JobCard({
         ) : null}
       </div>
 
+      {job.description ? <Description text={job.description} /> : null}
+
       <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-3">
         <span className="font-display text-base font-extrabold text-foreground">
           {job.salary ?? 'A convenir'}
@@ -117,6 +119,64 @@ export function JobCard({
 
       <ReportControl jobId={job.id} />
     </article>
+  )
+}
+
+/**
+ * La descripción, recortada a tres líneas.
+ *
+ * El botón solo aparece cuando el texto de verdad no cabe. Eso depende del
+ * ancho de la tarjeta, no del número de caracteres, así que se mide el nodo
+ * en lugar de adivinarlo: en el mapa la tarjeta es más estrecha que en el
+ * tablón y el mismo texto se desborda en un sitio y en el otro no.
+ */
+function Description({ text }: { text: string }) {
+  const ref = useRef<HTMLParagraphElement>(null)
+  const [expanded, setExpanded] = useState(false)
+  const [clamped, setClamped] = useState(false)
+
+  useEffect(() => {
+    // Ya desplegado no hay nada que medir, y medir daría siempre "cabe":
+    // el botón de recoger desaparecería al pulsarlo.
+    if (expanded) return
+
+    const el = ref.current
+    if (!el) return
+
+    const measure = () => setClamped(el.scrollHeight > el.clientHeight + 1)
+    measure()
+
+    const observer = new ResizeObserver(measure)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [text, expanded])
+
+  return (
+    <div className="mt-3">
+      <p
+        ref={ref}
+        className={cn(
+          // El backend conserva los saltos de línea del formulario.
+          'whitespace-pre-line text-sm leading-relaxed text-muted-foreground',
+          !expanded && 'line-clamp-3',
+        )}
+      >
+        {text}
+      </p>
+      {clamped ? (
+        <button
+          type="button"
+          aria-expanded={expanded}
+          onClick={(e) => {
+            e.stopPropagation()
+            setExpanded((v) => !v)
+          }}
+          className="mt-1 text-xs font-semibold text-primary underline-offset-2 hover:underline"
+        >
+          {expanded ? 'Ver menos' : 'Ver más'}
+        </button>
+      ) : null}
+    </div>
   )
 }
 
