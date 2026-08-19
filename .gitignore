@@ -7,15 +7,24 @@
 node_modules/
 vendor/
 .next/
+*.tsbuildinfo
+
+# Vercel
+.vercel/
 
 # Instrucciones para agentes: quedan en local, no en el repositorio.
 AGENTS.md
 CLAUDE.md
 
+# Restos del prototipo original de v0
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+.snowflake/
+.v0-trash/
+*.zip
+
 # Sistema
 .DS_Store
 *.log
 .claude/settings.local.json
-
-# Exportación original del prototipo
-*.zip

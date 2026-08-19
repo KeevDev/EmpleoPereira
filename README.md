@@ -6,9 +6,11 @@ por WhatsApp o correo.
 
 ```
 EmpleoPereira/
-├── frontend/   Next.js 16 + React 19 + Tailwind 4 + Leaflet  →  Vercel
-└── backend/    Laravel 13 (API REST) + PostgreSQL 17 + Redis →  Docker, servidor propio
+├── app/, components/, lib/   Next.js 16 + React 19 + Tailwind 4 + Leaflet  →  Vercel
+└── backend/                  Laravel 13 (API REST) + PostgreSQL 17 + Redis →  Docker, servidor propio
 ```
+
+El front vive en la raíz para que Vercel lo detecte sin configurar nada.
 
 El front se despliega en Vercel y llama por HTTPS a la API, que corre en tu
 servidor detrás de tu proxy. No comparten nada más: la API es stateless, sin
@@ -137,7 +139,6 @@ docker run --rm -v "$PWD":/app -w /app -u "$(id -u):$(id -g)" -e HOME=/tmp \
 ## Frontend
 
 ```bash
-cd frontend
 cp .env.example .env.local     # NEXT_PUBLIC_API_URL=http://localhost:8090
 pnpm install
 pnpm dev
@@ -145,12 +146,14 @@ pnpm dev
 
 ### Despliegue en Vercel
 
-1. Importa el repositorio y pon **`frontend`** como *Root Directory*.
+1. Importa el repositorio. El Root Directory se queda en la raíz: el
+   `package.json` está ahí y Vercel detecta Next.js solo.
 2. Define `NEXT_PUBLIC_API_URL` con el dominio público de tu API.
 3. Añade ese mismo dominio de Vercel a `CORS_ALLOWED_ORIGINS` en el backend y
    reinicia (`docker compose up -d app`).
 
-Framework, build y salida los detecta Vercel solo.
+Framework, build y salida los detecta Vercel solo. No hay que compilar nada a
+mano: `.next/` no se versiona, lo genera Vercel en cada despliegue.
 
 ---
 
