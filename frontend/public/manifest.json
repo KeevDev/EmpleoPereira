@@ -1,0 +1,33 @@
+{
+  "name": "Reconstruir Empleo",
+  "short_name": "Reconstruir",
+  "description": "Vacantes de empleo para Pereira, Dosquebradas y Santa Rosa. Reconstruyendo juntos tras el terremoto.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fbf7ee",
+  "theme_color": "#d33a2c",
+  "categories": ["business", "productivity"],
+  "lang": "es-CO",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

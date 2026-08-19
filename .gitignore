@@ -1,0 +1,21 @@
+# Secretos: nunca al repositorio.
+.env
+.env.*
+!.env.example
+
+# Dependencias y artefactos de build
+node_modules/
+vendor/
+.next/
+
+# Instrucciones para agentes: quedan en local, no en el repositorio.
+AGENTS.md
+CLAUDE.md
+
+# Sistema
+.DS_Store
+*.log
+.claude/settings.local.json
+
+# Exportación original del prototipo
+*.zip
